@@ -1,6 +1,7 @@
 package net.minestom.generators;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Registry;
@@ -53,24 +54,21 @@ public final class BlockGenerator extends DataGenerator {
             // Default values
             writeState(defaultBlockState, null, blockJson);
             // Block states
-            JsonObject blockStates = new JsonObject();
+            JsonArray blockStates = new JsonArray();
             for (BlockState bs : block.getStateDefinition().getPossibleStates()) {
                 JsonObject state = new JsonObject();
                 state.addProperty("stateId", Block.BLOCK_STATE_REGISTRY.getId(bs));
                 writeState(bs, blockJson, state);
 
-                StringBuilder stateName = new StringBuilder("[");
+                JsonObject properties = new JsonObject();
                 for (var propertyEntry : bs.getValues().entrySet()) {
-                    if (stateName.length() > 1) {
-                        stateName.append(",");
-                    }
-                    stateName.append(propertyEntry.getKey().getName().toLowerCase(Locale.ROOT))
-                            .append("=")
-                            .append(propertyEntry.getValue().toString().toLowerCase(Locale.ROOT));
+                    final String key = propertyEntry.getKey().getName().toLowerCase(Locale.ROOT);
+                    final String value = propertyEntry.getValue().toString().toLowerCase(Locale.ROOT);
+                    properties.addProperty(key, value);
                 }
-                stateName.append("]");
+                state.add("properties", properties);
 
-                blockStates.add(stateName.toString(), state);
+                blockStates.add(state);
             }
             blockJson.add("states", blockStates);
             blocks.add(location.toString(), blockJson);
