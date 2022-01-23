@@ -16,7 +16,6 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minestom.datagen.DataGenerator;
 
 import java.lang.reflect.Field;
-import java.util.Locale;
 import java.util.Objects;
 import java.util.Set;
 
@@ -53,22 +52,27 @@ public final class BlockGenerator extends DataGenerator {
             }
             // Default values
             writeState(defaultBlockState, null, blockJson);
+            {
+                // List of properties
+                JsonObject properties = new JsonObject();
+                for (var property : block.getStateDefinition().getProperties()) {
+                    JsonArray values = new JsonArray();
+                    final String key = property.getName();
+                    for (var value : property.getPossibleValues()) {
+                        values.add(value.toString());
+                    }
+                    properties.add(key, values);
+                }
+                blockJson.add("properties", properties);
+            }
             // Block states
-            JsonArray blockStates = new JsonArray();
+            JsonObject blockStates = new JsonObject();
             for (BlockState bs : block.getStateDefinition().getPossibleStates()) {
                 JsonObject state = new JsonObject();
-                state.addProperty("stateId", Block.BLOCK_STATE_REGISTRY.getId(bs));
                 writeState(bs, blockJson, state);
-
-                JsonObject properties = new JsonObject();
-                for (var propertyEntry : bs.getValues().entrySet()) {
-                    final String key = propertyEntry.getKey().getName().toLowerCase(Locale.ROOT);
-                    final String value = propertyEntry.getValue().toString().toLowerCase(Locale.ROOT);
-                    properties.addProperty(key, value);
-                }
-                state.add("properties", properties);
-
-                blockStates.add(state);
+                if (state.size() == 0) continue;
+                final int stateId = Block.BLOCK_STATE_REGISTRY.getId(bs);
+                blockStates.add(String.valueOf(stateId), state);
             }
             blockJson.add("states", blockStates);
             blocks.add(location.toString(), blockJson);
