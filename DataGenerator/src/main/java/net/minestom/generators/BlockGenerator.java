@@ -63,18 +63,33 @@ public final class BlockGenerator extends DataGenerator {
                     }
                     properties.add(key, values);
                 }
-                blockJson.add("properties", properties);
+                if (properties.size() > 0) {
+                    blockJson.add("properties", properties);
+                }
             }
             // Block states
             JsonObject blockStates = new JsonObject();
             for (BlockState bs : block.getStateDefinition().getPossibleStates()) {
                 JsonObject state = new JsonObject();
                 writeState(bs, blockJson, state);
-                if (state.size() == 0) continue;
-                final int stateId = Block.BLOCK_STATE_REGISTRY.getId(bs);
-                blockStates.add(String.valueOf(stateId), state);
+
+                if (state.size() > 0) {
+                    StringBuilder stateName = new StringBuilder("[");
+                    for (var propertyEntry : bs.getValues().entrySet()) {
+                        if (stateName.length() > 1) {
+                            stateName.append(",");
+                        }
+                        stateName.append(propertyEntry.getKey().getName())
+                                .append("=")
+                                .append(propertyEntry.getValue().toString());
+                    }
+                    stateName.append("]");
+                    blockStates.add(stateName.toString(), state);
+                }
             }
-            blockJson.add("states", blockStates);
+            if (blockStates.size() > 0) {
+                blockJson.add("states", blockStates);
+            }
             blocks.add(location.toString(), blockJson);
         }
         // Add block entity
