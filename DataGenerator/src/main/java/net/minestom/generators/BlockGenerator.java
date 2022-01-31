@@ -12,7 +12,6 @@ import net.minecraft.world.level.block.FallingBlock;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minestom.datagen.DataGenerator;
 
 import java.lang.reflect.Field;
@@ -130,11 +129,11 @@ public final class BlockGenerator extends DataGenerator {
         appendState(blockJson, state, "solid", blockState.getMaterial().isSolid(), boolean.class);
         appendState(blockJson, state, "solidBlocking", blockState.getMaterial().isSolidBlocking(), boolean.class);
         // Shapes (Hit-boxes)
-        appendState(blockJson, state, "shape", blockState.getShape(EmptyBlockGetter.INSTANCE, BlockPos.ZERO).toAabbs().toString(), String.class);
-        appendState(blockJson, state, "collisionShape", blockState.getCollisionShape(EmptyBlockGetter.INSTANCE, BlockPos.ZERO).toAabbs().toString(), String.class);
-        appendState(blockJson, state, "interactionShape", blockState.getInteractionShape(EmptyBlockGetter.INSTANCE, BlockPos.ZERO).toAabbs().toString(), String.class);
-        appendState(blockJson, state, "occlusionShape", blockState.getOcclusionShape(EmptyBlockGetter.INSTANCE, BlockPos.ZERO).toAabbs().toString(), String.class);
-        appendState(blockJson, state, "visualShape", blockState.getVisualShape(EmptyBlockGetter.INSTANCE, BlockPos.ZERO, CollisionContext.empty()).toAabbs().toString(), String.class);
+        //appendState(blockJson, state, "shape", blockState.getShape(EmptyBlockGetter.INSTANCE, BlockPos.ZERO).toAabbs().toString(), String.class);
+        //appendState(blockJson, state, "collisionShape", blockState.getCollisionShape(EmptyBlockGetter.INSTANCE, BlockPos.ZERO).toAabbs().toString(), String.class);
+        //appendState(blockJson, state, "interactionShape", blockState.getInteractionShape(EmptyBlockGetter.INSTANCE, BlockPos.ZERO).toAabbs().toString(), String.class);
+        //appendState(blockJson, state, "occlusionShape", blockState.getOcclusionShape(EmptyBlockGetter.INSTANCE, BlockPos.ZERO).toAabbs().toString(), String.class);
+        //appendState(blockJson, state, "visualShape", blockState.getVisualShape(EmptyBlockGetter.INSTANCE, BlockPos.ZERO, CollisionContext.empty()).toAabbs().toString(), String.class);
     }
 
     private <T> void appendState(JsonObject main, JsonObject state, String key, T value, T defaultValue, Class<T> valueType) {
