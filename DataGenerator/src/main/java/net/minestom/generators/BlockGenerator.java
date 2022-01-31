@@ -68,7 +68,9 @@ public final class BlockGenerator extends DataGenerator {
             }
             // Block states
             JsonObject blockStates = new JsonObject();
+            int minStateId = Integer.MAX_VALUE;
             for (BlockState bs : block.getStateDefinition().getPossibleStates()) {
+                minStateId = Math.min(minStateId, Block.BLOCK_STATE_REGISTRY.getId(bs));
                 JsonObject state = new JsonObject();
                 writeState(bs, blockJson, state);
 
@@ -89,6 +91,7 @@ public final class BlockGenerator extends DataGenerator {
             if (blockStates.size() > 0) {
                 blockJson.add("states", blockStates);
             }
+            blockJson.addProperty("minStateId", minStateId);
             blocks.add(location.toString(), blockJson);
         }
         // Add block entity
