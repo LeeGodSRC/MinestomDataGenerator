@@ -15,6 +15,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minestom.datagen.DataGenerator;
 
 import java.lang.reflect.Field;
+import java.util.Locale;
 import java.util.Objects;
 import java.util.Set;
 
@@ -58,7 +59,7 @@ public final class BlockGenerator extends DataGenerator {
                     JsonArray values = new JsonArray();
                     final String key = property.getName();
                     for (var value : property.getPossibleValues()) {
-                        values.add(value.toString());
+                        values.add(value.toString().toLowerCase(Locale.ROOT));
                     }
                     properties.add(key, values);
                 }
