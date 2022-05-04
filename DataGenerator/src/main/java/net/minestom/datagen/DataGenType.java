@@ -24,6 +24,7 @@ public enum DataGenType {
     POTIONS("potions", new PotionGenerator()),
     SOUNDS("sounds", new SoundGenerator()),
     SOUND_SOURCES("sound_sources", new SoundSourceGenerator()),
+    SOUND_TYPE("sound_types", new SoundTypeGenerator()),
     VILLAGER_PROFESSIONS("villager_professions", new VillagerProfessionGenerator()),
     VILLAGER_TYPES("villager_types", new VillagerTypeGenerator()),
 

@@ -9,6 +9,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.level.EmptyBlockGetter;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.FallingBlock;
+import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
@@ -28,6 +29,7 @@ public final class BlockGenerator extends DataGenerator {
             final var location = Registry.BLOCK.getKey(block);
             final var defaultBlockState = block.defaultBlockState();
 
+            final SoundType soundType = block.getSoundType(defaultBlockState);
             JsonObject blockJson = new JsonObject();
             blockJson.addProperty("id", Registry.BLOCK.getId(block));
             blockJson.addProperty("translationKey", block.getDescriptionId());
@@ -132,6 +134,9 @@ public final class BlockGenerator extends DataGenerator {
         appendState(blockJson, state, "interactionShape", blockState.getInteractionShape(EmptyBlockGetter.INSTANCE, BlockPos.ZERO).toAabbs().toString(), String.class);
         appendState(blockJson, state, "occlusionShape", blockState.getOcclusionShape(EmptyBlockGetter.INSTANCE, BlockPos.ZERO).toAabbs().toString(), String.class);
         appendState(blockJson, state, "visualShape", blockState.getVisualShape(EmptyBlockGetter.INSTANCE, BlockPos.ZERO, CollisionContext.empty()).toAabbs().toString(), String.class);
+        // Sound Type
+        final var soundType = blockState.getBlock().getSoundType(blockState);
+        appendState(blockJson, state, "soundType", SoundTypeGenerator.getNameBySoundType(soundType), String.class);
     }
 
     private <T> void appendState(JsonObject main, JsonObject state, String key, T value, T defaultValue, Class<T> valueType) {
